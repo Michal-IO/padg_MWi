@@ -21,6 +21,7 @@ def main():
                 print('2. Dodaj nowe lotnisko')
                 print('3. Usuń lotnisko')
                 print('4. Aktualizuj dane lotniska')
+                print('5. Zarządzanie kadrą wybranego lotniska')
                 print('0. Powrót')
                 print('===============================================================')
 
@@ -40,6 +41,39 @@ def main():
                 if sub_choice == '4':
                     print('Wybrano funkcje aktualizacji lotniska')
                     update_airport(airports)
+                if sub_choice == '5':
+                    airport_code = input("Podaj kod lotniska: ")
+
+                    airport_exist = False
+                    for airport in airports:
+                        if airport.code == airport_code:
+                            airport_exist = True
+                            break
+                    if not airport_exist:
+                        print(f'Błąd: Lotnisko o kodzie [{airport_code}] nie istnieje')
+                        print('Najpierw dodaj lotnisko do listy')
+                    else:
+                        while True:
+                            print(f'=== SYSTEM ZARZADZANIA PRACOWNIKAMI LOTNISKA [{airport_code}] ===')
+                            print('1. Wyświetl pracowników lotniska')
+                            print('2. Dodaj pracownika do tego lotniska')
+                            print('3. Usuń pracownika z tego lotniska')
+                            print('4. Edytuj pracownika tego lotniska')
+                            print('0. Wróc do menu lotnisk')
+
+                            employee_choice = input('Wybierz opcje: ')
+
+                            if employee_choice == '0':
+                                break
+                            if employee_choice == '1':
+                                employee_in_airport_info(employees, airport_code)
+                            if employee_choice == '2':
+                                add_employee_to_airport(employees, airport_code)
+                            if employee_choice == '3':
+                                delete_employee_from_airport(employees, airport_code)
+                            if employee_choice == '4':
+                                update_employee_in_airport(employees, airport_code)
+
 
         if tmp_choice == '2':
             while True:
@@ -52,20 +86,20 @@ def main():
                 print('0. Powrót')
                 print('==================================================================')
 
-                sub_choice2 = input('Wybierz opc1ję:')
+                sub_choice = input('Wybierz opc1ję:')
 
-                if sub_choice2 == '0':
+                if sub_choice == '0':
                     break
-                if sub_choice2 == '1':
+                if sub_choice == '1':
                     print('Wybrano funkcje wyświetlania pracowników')
                     employee_info(employees)
-                if sub_choice2 == '2':
+                if sub_choice == '2':
                     print('Wybrano funckcje dodawania pracowników')
-                    add_employee(employees)
-                if sub_choice2 == '3':
+                    add_employee(employees, airports)
+                if sub_choice == '3':
                     print('Wybrano funkcje usuwania pracowników')
                     delete_employee(employees)
-                if sub_choice2 == '4':
+                if sub_choice == '4':
                     print('Wybrano funkcje aktualizowania pracowników')
                     update_employee(employees)
 if __name__ == '__main__':
