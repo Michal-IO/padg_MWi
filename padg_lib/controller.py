@@ -53,6 +53,33 @@ class Employee:
             # print(longitude)
             return [latitude, longitude]
 
+class Client:
+    def __init__(self, name:str, surname: str, location: str, airport: str):
+        self.name = name
+        self.surname = surname
+        self.location = location
+        self.airport = airport
+        self.coords = self.get_coordinates()
+
+    def get_coordinates(self):
+        import requests
+        from bs4 import BeautifulSoup
+        url: str = f'https://pl.wikipedia.org/wiki/{self.location}'
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                          "AppleWebKit/537.36 (KHTML, like Gecko) "
+                          "Chrome/123.0.0.0 Safari/537.36"
+        }
+        response = requests.get(url, headers=headers)
+        # print(response.text)
+        response_html = BeautifulSoup(response.text, "html.parser")
+        # print(response_html.prettify())
+        latitude = float(response_html.select('.latitude')[1].text.replace(',', '.'))
+        # print(latitude)
+        longitude = float(response_html.select('.longitude')[1].text.replace(',', '.'))
+        # print(longitude)
+        return [latitude, longitude]
+
 # CRUD DLA LOTNISK
 
 def add_airport(airports_list: list):
@@ -168,3 +195,45 @@ def update_employee_in_airport(employees_list: list, airport_code: str):
             employee.airport = input('Wprowadź lotnisko: ')
             employee.coords = employee.get_coordinates()
 
+# CRUD DLA KLIENTOW
+
+def add_client(clients_list: list, airports_list: list):
+    print(f'Dodawanie klienta')
+    name = input('Imię: ')
+    surname = input('Nazwisko: ')
+    location = input('Miasto zamieszkania: ')
+
+    airport_input = input('Kod lotniska wylotu: ')
+
+    airport_exist = False
+    for airport in airports_list:
+        if airport.code == airport_input:
+            airport_exist = True
+            break
+    if airport_exist:
+        clients_list.append(Client(name, surname, location, airport_input))
+        print("Klient dodany")
+    else:
+        print(f'Klient nie dodany, lotnisko {airport_input} nie istnieje')
+
+def client_info(clients_list: list):
+    print('Lista klientow')
+    for client in clients_list:
+        print(f'Klient {client.name} {client.surname} {client.location}, wylatuje z lotniska: {client.airport}')
+
+def delete_client(clients_list: list):
+    tmp_name = input('Wprowadz imie: ')
+    for client in clients_list:
+        clients_list.remove(client)
+        print('Klient usunięty')
+
+def update_client(clients_list: list):
+    tmp_name = input('Wprowadz imie: ')
+    for client in clients_list:
+        if client.name == tmp_name:
+            client.name = input('Wprowadz imie: ')
+            client.surname = input('Wprowadz nazwisko: ')
+            client.location = input('Wprowadz miasto: ')
+            client.airport = input('Wprowadz nazwisko: ')
+            client.coords = client.get_coordinates()
+            print('Klient zaktualizowany')
