@@ -1,4 +1,4 @@
-from padg_lib.model import airports, employees
+from padg_lib.model import airports, employees, clients
 from padg_lib.controller import *
 
 def main():
@@ -6,6 +6,7 @@ def main():
         print('================ SYSTEM LOTNISKOWY ================')
         print('1. Zarządzanie Lotniskami')
         print('2. Zarządzanie Pracownikami')
+        print('3. Zarzadzanie klientami')
         print('0. Wyjście')
         print('===================================================')
 
@@ -102,5 +103,25 @@ def main():
                 if sub_choice == '4':
                     print('Wybrano funkcje aktualizowania pracowników')
                     update_employee(employees)
+        if tmp_choice == '3':
+            while True:
+                print('===== MENU KLIENTOW =====')
+                print('1. Wyświetl klientów')
+                print('2. Dodaj klienta')
+                print('3. Usuń klienta')
+                print('4. Aktualizuj klienta')
+                print('0. Powrót')
+
+                sub_choice = input('Wybierz opcje: ')
+                if sub_choice == '0':
+                    break
+                if sub_choice == '1':
+                    client_info(clients)
+                if sub_choice == '2':
+                    add_client(clients, airports)
+                if sub_choice == '3':
+                    delete_client(clients)
+                if sub_choice == '4':
+                    update_client(clients)
 if __name__ == '__main__':
     main()
