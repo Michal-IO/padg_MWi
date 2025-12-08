@@ -23,6 +23,7 @@ def main():
                 print('3. Usuń lotnisko')
                 print('4. Aktualizuj dane lotniska')
                 print('5. Zarządzanie kadrą wybranego lotniska')
+                print('6. Zarządzanie klientami wybranego lotniska')
                 print('0. Powrót')
                 print('===============================================================')
 
@@ -74,6 +75,37 @@ def main():
                                 delete_employee_from_airport(employees, airport_code)
                             if employee_choice == '4':
                                 update_employee_in_airport(employees, airport_code)
+                if sub_choice == '6':
+                    airport_code = input('Podaj kod kod lotniska: ')
+                    airport_exist = False
+                    for airport in airports:
+                        if airport.code == airport_code:
+                            airport_exist = True
+                            break
+                    if not airport_exist:
+                        print(f'Błąd: Lotnisko o kodzie [{airport_code}] nie istnieje')
+                        print('Najpierw dodaj lotnisko do listy')
+                    else:
+                        while True:
+                            print(f'=== KLIENCIE LOTNISKA [{airport_code}] ===')
+                            print('1. Wyświetl klientów tego lotniska')
+                            print('2. Dodaj klienta do tego lotniska')
+                            print('3. Usuń klienta z tego lotniska')
+                            print('4. Edytuj klienta tego lotniska')
+                            print('0. Wróć do menu lotnisk')
+
+                            client_choice = input('Wybierz opcje: ')
+                            if client_choice == '0':
+                                break
+                            if client_choice == '1':
+                                client_in_airport_info(clients, airport_code)
+                            if client_choice == '2':
+                                add_client_to_airport(clients, airport_code)
+                            if client_choice == '3':
+                                delete_client_from_airport(clients, airport_code)
+                            if client_choice == '4':
+                                update_client_in_airport(clients, airport_code)
+
 
 
         if tmp_choice == '2':
@@ -103,6 +135,7 @@ def main():
                 if sub_choice == '4':
                     print('Wybrano funkcje aktualizowania pracowników')
                     update_employee(employees)
+
         if tmp_choice == '3':
             while True:
                 print('===== MENU KLIENTOW =====')
@@ -123,5 +156,6 @@ def main():
                     delete_client(clients)
                 if sub_choice == '4':
                     update_client(clients)
+
 if __name__ == '__main__':
     main()

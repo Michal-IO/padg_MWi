@@ -237,3 +237,36 @@ def update_client(clients_list: list):
             client.airport = input('Wprowadz nazwisko: ')
             client.coords = client.get_coordinates()
             print('Klient zaktualizowany')
+
+# CRUD DLA KLIENTOW KONKRETNEGO LOTNISKA
+
+def add_client_to_airport(clients_list: list, airport_code: str):
+    print(f'Dodawanie klienta do lotniska {airport_code}...')
+    name = input('Wprowadz imie: ')
+    surname = input('Wprowadz nazwisko: ')
+    location = input('Wprowadz miasto: ')
+    clients_list.append(Client(name, surname, location, airport_code))
+    print("Klient dodany")
+
+def client_in_airport_info(clients_list: list, airport_code: str):
+    print(f'Klient wylatujący z lotniska {airport_code}')
+    for client in clients_list:
+        if client.airport == airport_code:
+            print(f'Klient {client.name} {client.surname} {client.location}')
+
+def delete_client_from_airport(clients_list: list, airport_code: str):
+    tmp_name = input('Wprowadz imie: ')
+    for client in clients_list:
+        if client.name == tmp_name and client.airport == airport_code:
+            clients_list.remove(client)
+            print('Klient usunięty')
+
+def update_client_in_airport(clients_list: list, airport_code: str):
+    tmp_name = input('Wprowadz imie: ')
+    for client in clients_list:
+        if client.name == tmp_name and client.airport == airport_code:
+            client.name = input('Wprowadz imie: ')
+            client.surname = input('Wprowadz nazwisko: ')
+            client.location = input('Wprowadz miasto: ')
+            client.coords = client.get_coordinates()
+            print('Klient zaktualizowany')
