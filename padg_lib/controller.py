@@ -1,4 +1,7 @@
+from operator import index
 
+from padg_lib.view import *
+from padg_lib.model import airports, employees, clients
 
 class Airport:
     def __init__(self, name:str, location: str, code: str):
@@ -27,11 +30,12 @@ class Airport:
             return [latitude, longitude]
 
 class Employee:
-    def __init__(self, name:str, surname: str, location: str, airport: str):
+    def __init__(self, name:str, surname: str, age: int, location: str, airport_code: str):
         self.name = name
         self.surname = surname
+        self.age = age
         self.location = location
-        self.airport = airport
+        self.airport = airport_code
         self.coords = self.get_coordinates()
 
     def get_coordinates(self):
@@ -54,11 +58,13 @@ class Employee:
             return [latitude, longitude]
 
 class Client:
-    def __init__(self, name:str, surname: str, location: str, airport: str):
+    def __init__(self, name:str, surname: str, age: int, location: str, arrival_code: str, departure_code: str):
         self.name = name
         self.surname = surname
+        self.age = age
         self.location = location
-        self.airport = airport
+        self.arrival_code = arrival_code
+        self.departure_code = departure_code
         self.coords = self.get_coordinates()
 
     def get_coordinates(self):
@@ -80,193 +86,336 @@ class Client:
         # print(longitude)
         return [latitude, longitude]
 
-# CRUD DLA LOTNISK
+mode = "null"
 
-def add_airport(airports_list: list):
-    print('Dodawanie lotnisk...')
-    name = input('Wprowadź nazwe lotniska: ')
-    location = input('Wprowadź miasto: ')
-    code = input('Wprowadź kod lotniska: ')
-    print("Lotnisko dodane")
-    airports_list.append(Airport(name, location, code))
+def switch_airports():
+    global mode
+    mode = "airports"
 
-def airport_info(airports_list: list):
-    for airport in airports_list:
-        print(f'Lotnisko {airport.name} w miejscowości {airport.location}, o kodzie: [{airport.code}]')
+    label_1.grid()
+    entry_1.grid()
+    label_2.grid()
+    entry_2.grid()
+    label_3.grid()
+    entry_3.grid()
+    label_4.grid()
+    entry_4.grid()
+    label_5.grid()
+    entry_5.grid()
+    label_6.grid()
+    entry_6.grid()
 
-def delete_airport(airports_list: list):
-    tmp_name = input('Wprowadz nazwe lotniska do usunięcia: ')
-    for airport in airports_list:
-        if airport.name == tmp_name:
-            airports_list.remove(airport)
+    label_1.config(text="Lotnisko: ")
+    label_2.config(text="Miasto: ")
+    label_3.config(text="KOD: ")
 
-def update_airport(airports_list: list):
-    tmp_name = input('Wprowadź nazwe: ')
-    for airport in airports_list:
-        if airport.name == tmp_name:
-            airport.name = input('Wprowadź nazwe: ')
-            airport.location = input('Wprowadź miasto: ')
-            airport.code = input('Wprowadź kod lotniska: ')
-            airport.coords = airport.get_coordinates()
+    label_4.grid_remove()
+    entry_4.grid_remove()
+    label_5.grid_remove()
+    entry_5.grid_remove()
+    label_6.grid_remove()
+    entry_6.grid_remove()
 
-# CRUD DLA PRACOWNIKOW
+    listbox_list.delete(0, END)
 
-def add_employee(employees_list: list, airports_list: list):
-    print('Dodawanie pracowników...')
-    name = input('Wprowadź imię: ')
-    surname = input('Wprowadź nazwisko: ')
-    location = input('Wprowadź miasto: ')
-    airport = input('Wprowadź kod lotniska: ')
+    for airport in airports:
+        listbox_list.insert(END, f"{airport.name}")
 
-    airport_exist = False
-    for airport in airports_list:
-        if airport.code == airport:
-            airport_exist = True
-            break
-    if airport_exist:
-        print(f"Przypisano do istniejącego lotniska o kodzie {airport}")
-    else:
-        print(f"Lotnisko o kodzie {airport} nie istnieje")
-        decision = input("Czy należy je utworzyć? (tak/nie)")
+    refresh_map()
 
-        if decision == 'tak':
-            print(f"Tworzenie nowego lotniska o kodzie [{airport}]")
-            new_city = input('Wprowadz miasto: ')
-            new_name = input('Wprowadz nazwę: ')
-            new_airport = Airport(new_name, new_city, airport)
-            airports_list.append(new_airport)
-            print("Nowe lotnisko zostało pomyślnie utworzone")
-        if decision == 'nie':
-            print("Anulowano dodawania pracownika")
-            return
-    employees_list.append(Employee(name, surname, location, airport))
-    print("Pracownik dodany")
+    entry_1.delete(0, END)
+    entry_2.delete(0, END)
+    entry_3.delete(0, END)
+    entry_4.delete(0, END)
+    entry_5.delete(0, END)
+    entry_6.delete(0, END)
 
-def employee_info(employees_list: list):
-    for employee in employees_list:
-        print(f'Pracownik {employee.name} {employee.surname}, z miejscowości {employee.location}, kod lotniska: {employee.airport}')
+def switch_employees():
+    global mode
+    mode = "employees"
 
-def delete_employee(employees_list: list):
-    tmp_name = input('Wprowadź imię: ')
-    for employee in employees_list:
-        if employee.name == tmp_name:
-            employees_list.remove(employee)
+    label_1.grid()
+    entry_1.grid()
+    label_2.grid()
+    entry_2.grid()
+    label_3.grid()
+    entry_3.grid()
+    label_4.grid()
+    entry_4.grid()
+    label_5.grid()
+    entry_5.grid()
+    label_6.grid()
+    entry_6.grid()
 
-def update_employee(employees_list: list):
-    tmp_name = input('Wprowadź imię: ')
-    for employee in employees_list:
-        if employee.name == tmp_name:
-            employee.name = input('Wprowadź imię: ')
-            employee.surname = input('Wprowadź nazwisko: ')
-            employee.location = input('Wprowadź miasto: ')
-            employee.airport = input('Wprowadź lotnisko: ')
-            employee.coords = employee.get_coordinates()
+    label_1.config(text="Imię: ")
+    label_2.config(text="Nazwisko: ")
+    label_3.config(text="Wiek: ")
+    label_4.config(text="Miasto: ")
+    label_5.config(text="KOD: ")
 
-# CRUD DLA PRACOWNIKOW KONKRETNEGO LOTNISKA
+    label_6.grid_remove()
+    entry_6.grid_remove()
 
-def employee_in_airport_info(employees_list: list, airport_code: str):
-    print(f'Pracownicy lotniska {airport_code}')
-    for employee in employees_list:
-        if employee.airport == airport_code:
-            print(f'Pracownik {employee.name} {employee.surname}')
+    listbox_list.delete(0, END)
 
-def add_employee_to_airport(employees_list: list, airport_code: str):
-    print(f'Dodawanie pracownika do lotniska {airport_code}...')
-    name = input('Wprowadz imie: ')
-    surname = input('Wprowadz nazwisko: ')
-    location = input('Wprowadz miasto: ')
-    employees_list.append(Employee(name, surname, location, airport_code))
-    print("Pracownik dodany")
+    for employee in employees:
+        listbox_list.insert(END, f"{employee.name} {employee.surname}")
 
-def delete_employee_from_airport(employees_list: list, airport_code: str):
-    tmp_name = input('Wprowadz imie: ')
-    for employee in employees_list:
-        if employee.name == tmp_name and employee.airport == airport_code:
-            employees_list.remove(employee)
+    refresh_map()
+
+    entry_1.delete(0, END)
+    entry_2.delete(0, END)
+    entry_3.delete(0, END)
+    entry_4.delete(0, END)
+    entry_5.delete(0, END)
+    entry_6.delete(0, END)
+
+def switch_clients():
+    global mode
+    mode = "clients"
+
+    label_1.grid()
+    entry_1.grid()
+    label_2.grid()
+    entry_2.grid()
+    label_3.grid()
+    entry_3.grid()
+    label_4.grid()
+    entry_4.grid()
+    label_5.grid()
+    entry_5.grid()
+    label_6.grid()
+    entry_6.grid()
+
+    label_1.config(text="Imię: ")
+    label_2.config(text="Nazwisko: ")
+    label_3.config(text="Wiek: ")
+    label_4.config(text="Miasto: ")
+    label_5.config(text="Przylot: ")
+    label_6.config(text="Odlot: ")
+
+    listbox_list.delete(0, END)
+
+    for client in clients:
+        listbox_list.insert(END, f"{client.name} {client.surname}")
+
+    refresh_map()
+
+    entry_1.delete(0, END)
+    entry_2.delete(0, END)
+    entry_3.delete(0, END)
+    entry_4.delete(0, END)
+    entry_5.delete(0, END)
+    entry_6.delete(0, END)
+
+def add():
+    l1 = entry_1.get()
+    l2 = entry_2.get()
+    l3 = entry_3.get()
+    l4 = entry_4.get()
+    l5 = entry_5.get()
+    l6 = entry_6.get()
+
+    if mode == "airports":
+        airport = Airport(l1, l2, l3)
+        airports.append(airport)
+        listbox_list.insert(END, airport.name)
+        map_widget.set_marker(airport.coords[0], airport.coords[1], text=airport.name)
+
+        code_list = []
+        for airport in airports:
+            if airport.code not in code_list:
+                code_list.append(airport.code)
+        checkbox_filtr["values"] = code_list
+
+    if mode == "employees":
+        employee = Employee(l1, l2, l3, l4, l5)
+        employees.append(employee)
+        listbox_list.insert(END, f"{employee.name} {employee.surname}")
+        map_widget.set_marker(employee.coords[0], employee.coords[1], text=f"{employee.name} {employee.surname}")
+
+    if mode == "clients":
+        client = Client(l1, l2, l3, l4, l5, l6)
+        clients.append(client)
+        listbox_list.insert(END, f"{client.name} {client.surname}")
+        map_widget.set_marker(client.coords[0], client.coords[1], text=f"{client.name} {client.surname}")
+
+    entry_1.delete(0, END)
+    entry_2.delete(0, END)
+    entry_3.delete(0, END)
+    entry_4.delete(0, END)
+    entry_5.delete(0, END)
+    entry_6.delete(0, END)
+
+def update():
+    index = listbox_list.curselection()[0]
+
+    l1 = entry_1.get()
+    l2 = entry_2.get()
+    l3 = entry_3.get()
+    l4 = entry_4.get()
+    l5 = entry_5.get()
+    l6 = entry_6.get()
+
+    if mode == "airports":
+        airport = Airport(l1, l2, l3)
+        airports[index] = airport
+        listbox_list.delete(index)
+        listbox_list.insert(index, l1)
+    if mode == "employees":
+        employee = Employee(l1, l2, l3, l4, l5)
+        employees[index] = employee
+        listbox_list.delete(index)
+        listbox_list.insert(index, f"{l1} {l2}")
+    if mode == "clients":
+        client = Client(l1, l2, l3, l4, l5, l6)
+        clients[index] = client
+        listbox_list.delete(index)
+        listbox_list.insert(index, f"{l1} {l2}")
+
+    refresh_map()
+
+def refresh_map():
+    map_widget.delete_all_marker()
+
+    if mode == "airports":
+        for airport in airports:
+            map_widget.set_marker(airport.coords[0], airport.coords[1], text=airport.name)
+
+    if mode == "clients":
+        for client in clients:
+            map_widget.set_marker(client.coords[0], client.coords[1], text=f"{client.name} {client.surname}")
+
+    if mode == "employees":
+        for employee in employees:
+            map_widget.set_marker(employee.coords[0], employee.coords[1], text=f"{employee.name} {employee.surname}")
 
 
-def update_employee_in_airport(employees_list: list, airport_code: str):
-    tmp_name = input('Wprowadz imie do edycji: ')
-    for employee in employees_list:
-        if employee.name == tmp_name and employee.airport == airport_code:
-            employee.name = input('Wprowadź imię: ')
-            employee.surname = input('Wprowadź nazwisko: ')
-            employee.location = input('Wprowadź miasto: ')
-            employee.airport = input('Wprowadź lotnisko: ')
-            employee.coords = employee.get_coordinates()
+def delete():
+    index = listbox_list.curselection()[0]
 
-# CRUD DLA KLIENTOW
+    if mode == "airports":
+        airports.pop(index)
+    if mode == "employees":
+        employees.pop(index)
+    if mode == "clients":
+        clients.pop(index)
 
-def add_client(clients_list: list, airports_list: list):
-    print(f'Dodawanie klienta')
-    name = input('Imię: ')
-    surname = input('Nazwisko: ')
-    location = input('Miasto zamieszkania: ')
+    listbox_list.delete(index)
+    refresh_map()
 
-    airport_input = input('Kod lotniska wylotu: ')
+def details():
+    index = listbox_list.curselection()[0]
 
-    airport_exist = False
-    for airport in airports_list:
-        if airport.code == airport_input:
-            airport_exist = True
-            break
-    if airport_exist:
-        clients_list.append(Client(name, surname, location, airport_input))
-        print("Klient dodany")
-    else:
-        print(f'Klient nie dodany, lotnisko {airport_input} nie istnieje')
+    if mode == "airports":
+        airport = airports[index]
+        map_widget.set_position(airport.coords[0], airport.coords[1])
 
-def client_info(clients_list: list):
-    print('Lista klientow')
-    for client in clients_list:
-        print(f'Klient {client.name} {client.surname} {client.location}, wylatuje z lotniska: {client.airport}')
+    if mode == "employees":
+        employee = employees[index]
+        map_widget.set_position(employee.coords[0], employee.coords[1])
 
-def delete_client(clients_list: list):
-    tmp_name = input('Wprowadz imie: ')
-    for client in clients_list:
-        clients_list.remove(client)
-        print('Klient usunięty')
+    if mode == "clients":
+        client = clients[index]
+        map_widget.set_position(client.coords[0], client.coords[1])
 
-def update_client(clients_list: list):
-    tmp_name = input('Wprowadz imie: ')
-    for client in clients_list:
-        if client.name == tmp_name:
-            client.name = input('Wprowadz imie: ')
-            client.surname = input('Wprowadz nazwisko: ')
-            client.location = input('Wprowadz miasto: ')
-            client.airport = input('Wprowadz nazwisko: ')
-            client.coords = client.get_coordinates()
-            print('Klient zaktualizowany')
+    map_widget.set_zoom(14)
 
-# CRUD DLA KLIENTOW KONKRETNEGO LOTNISKA
+def select(event):
+    selection = listbox_list.curselection()
 
-def add_client_to_airport(clients_list: list, airport_code: str):
-    print(f'Dodawanie klienta do lotniska {airport_code}...')
-    name = input('Wprowadz imie: ')
-    surname = input('Wprowadz nazwisko: ')
-    location = input('Wprowadz miasto: ')
-    clients_list.append(Client(name, surname, location, airport_code))
-    print("Klient dodany")
+    index = selection[0]
 
-def client_in_airport_info(clients_list: list, airport_code: str):
-    print(f'Klient wylatujący z lotniska {airport_code}')
-    for client in clients_list:
-        if client.airport == airport_code:
-            print(f'Klient {client.name} {client.surname} {client.location}')
+    if mode == "airports":
+        airport = airports[index]
 
-def delete_client_from_airport(clients_list: list, airport_code: str):
-    tmp_name = input('Wprowadz imie: ')
-    for client in clients_list:
-        if client.name == tmp_name and client.airport == airport_code:
-            clients_list.remove(client)
-            print('Klient usunięty')
+        entry_1.delete(0, END)
+        entry_1.insert(0, airport.name)
 
-def update_client_in_airport(clients_list: list, airport_code: str):
-    tmp_name = input('Wprowadz imie: ')
-    for client in clients_list:
-        if client.name == tmp_name and client.airport == airport_code:
-            client.name = input('Wprowadz imie: ')
-            client.surname = input('Wprowadz nazwisko: ')
-            client.location = input('Wprowadz miasto: ')
-            client.coords = client.get_coordinates()
-            print('Klient zaktualizowany')
+        entry_2.delete(0, END)
+        entry_2.insert(0, airport.location)
+
+        entry_3.delete(0, END)
+        entry_3.insert(0, airport.code)
+
+        entry_4.delete(0, END)
+        entry_5.delete(0, END)
+        entry_6.delete(0, END)
+
+        map_widget.set_position(airport.coords[0], airport.coords[1])
+
+    if mode == "employees":
+        employee = employees[index]
+
+        entry_1.delete(0, END)
+        entry_1.insert(0, employee.name)
+
+        entry_2.delete(0, END)
+        entry_2.insert(0, employee.surname)
+
+        entry_3.delete(0, END)
+        entry_3.insert(0, employee.age)
+
+        entry_4.delete(0, END)
+        entry_4.insert(0, employee.location)
+
+        entry_5.delete(0, END)
+        entry_5.insert(0, employee.airport)
+
+        entry_6.delete(0, END)
+
+        map_widget.set_position(employee.coords[0], employee.coords[1])
+
+    if mode == "clients":
+        client = clients[index]
+
+        entry_1.delete(0, END)
+        entry_1.insert(0, client.name)
+
+        entry_2.delete(0, END)
+        entry_2.insert(0, client.surname)
+
+        entry_3.delete(0, END)
+        entry_3.insert(0, client.age)
+
+        entry_4.delete(0, END)
+        entry_4.insert(0, client.location)
+
+        entry_5.delete(0, END)
+        entry_5.insert(0, client.arrival_code)
+
+        entry_6.delete(0, END)
+        entry_6.insert(0, client.departure_code)
+
+        map_widget.set_position(client.coords[0], client.coords[1])
+
+    map_widget.set_zoom(15)
+
+def filter():
+    code = checkbox_filtr.get()
+
+    listbox_list.delete(0, END)
+    map_widget.delete_all_marker()
+
+    if mode == "airports":
+        for airport in airports:
+            if airport.code == code:
+                listbox_list.insert(END, airport.name)
+                map_widget.set_marker(airport.coords[0], airport.coords[1], text=airport.name)
+                map_widget.set_position(airport.coords[0], airport.coords[1])
+
+    if mode == "employees":
+        for employee in employees:
+            if employee.airport == code:
+                listbox_list.insert(END, f"{employee.name} {employee.surname}")
+                map_widget.set_marker(employee.coords[0], employee.coords[1], text=f"{employee.name} {employee.surname}")
+                map_widget.set_position(employee.coords[0], employee.coords[1])
+
+    if mode == "clients":
+        for client in clients:
+            if client.arrival_code == code or client.departure_code == code:
+                listbox_list.insert(END, f"{client.name} {client.surname}")
+                map_widget.set_marker(client.coords[0], client.coords[1], text= f"{client.name} {client.surname}")
+                map_widget.set_position(client.coords[0], client.coords[1])
+
+    map_widget.set_zoom(15)
