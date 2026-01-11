@@ -1,14 +1,14 @@
 from operator import index
-
+import psycopg2
 from padg_lib.view import *
 from padg_lib.model import airports, employees, clients
 
 class Airport:
-    def __init__(self, name:str, location: str, code: str):
+    def __init__(self, name:str, location: str, code: str, coords=None):
         self.name = name
         self.location = location
         self.code = code
-        self.coords = self.get_coordinates()
+        self.coords = coords if coords else self.get_coordinates()
 
     def get_coordinates(self):
             import requests
@@ -30,13 +30,13 @@ class Airport:
             return [latitude, longitude]
 
 class Employee:
-    def __init__(self, name:str, surname: str, age: int, location: str, airport_code: str):
+    def __init__(self, name:str, surname: str, age: int, location: str, airport_code: str, coords=None):
         self.name = name
         self.surname = surname
         self.age = age
         self.location = location
         self.airport = airport_code
-        self.coords = self.get_coordinates()
+        self.coords = coords if coords else self.get_coordinates()
 
     def get_coordinates(self):
             import requests
@@ -58,14 +58,14 @@ class Employee:
             return [latitude, longitude]
 
 class Client:
-    def __init__(self, name:str, surname: str, age: int, location: str, arrival_code: str, departure_code: str):
+    def __init__(self, name:str, surname: str, age: int, location: str, arrival_code: str, departure_code: str, coords=None):
         self.name = name
         self.surname = surname
         self.age = age
         self.location = location
         self.arrival_code = arrival_code
         self.departure_code = departure_code
-        self.coords = self.get_coordinates()
+        self.coords = coords if coords else self.get_coordinates()
 
     def get_coordinates(self):
         import requests
@@ -419,3 +419,46 @@ def filter():
                 map_widget.set_position(client.coords[0], client.coords[1])
 
     map_widget.set_zoom(15)
+
+def load_db(db_engine):
+    airports.clear()
+    employees.clear()
+    clients.clear()
+
+    cursor = db_engine.cursor()
+
+    cursor.execute("SELECT nazwa, miasto, kod, szerokosc, dlugosc FROM airports;")
+    for row in cursor.fetchall():
+        airports.append(Airport(row[0], row[1], row[2], coords=[row[3], row[4]]))
+
+    cursor.execute("SELECT imie, nazwisko, wiek, miasto, kod_lotniska, szerokosc, dlugosc FROM employees;")
+    for row in cursor.fetchall():
+        employees.append(Employee(row[0], row[1], row[2], row[3], row[4], coords=[row[5], row[6]]))
+
+    cursor.execute("SELECT imie, nazwisko, wiek, miasto, kod_przylotu, kod_odlotu, szerokosc, dlugosc FROM clients;")
+    for row in cursor.fetchall():
+        clients.append(Client(row[0], row[1], row[2], row[3], row[4], row[5], coords=[row[6], row[7]]))
+
+    cursor.close()
+
+def save_db(db_engine):
+    cursor = db_engine.cursor()
+    cursor.execute("TRUNCATE TABLE airports, employees, clients;")
+
+    for airport in airports:
+        cursor.execute("INSERT INTO airports (nazwa, miasto,kod, szerokosc, dlugosc) VALUES (%s, %s, %s, %s, %s)",
+                       (airport.name, airport.location, airport.code, airport.coords[0], airport.coords[1]))
+
+    for employee in employees:
+        cursor.execute("INSERT INTO employees (imie, nazwisko, wiek, miasto, kod_lotniska, szerokosc, dlugosc) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+                       (employee.name, employee.surname, employee.age, employee.location, employee.airport, employee.coords[0], employee.coords[1]))
+
+    for client in clients:
+        cursor.execute("INSERT INTO clients (imie, nazwisko, wiek, miasto, kod_przylotu, kod_odlotu, szerokosc, dlugosc) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
+                       (client.name, client.surname, client.age, client.location, client.arrival_code, client.departure_code, client.coords[0], client.coords[1]))
+
+    db_engine.commit()
+    cursor.close()
+
+
+
