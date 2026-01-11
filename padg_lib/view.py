@@ -29,50 +29,63 @@ top_frame.grid_columnconfigure(2, weight=1)
 button_airports = Button(top_frame, text = 'LOTNISKA', width=15)
 button_airports.grid(row=0, column=0, sticky=EW)
 
+
 button_employees = Button(top_frame, text = 'PRACOWNICY', width=15)
 button_employees.grid(row=0, column=1, sticky=EW)
 
+
 button_clients = Button(top_frame, text = 'KLIENCI', width=15)
 button_clients.grid(row=0, column=2, sticky=EW)
+
 
 #LEWA CZĘŚĆ
 
 label_head = Label(left_frame, text='FORMULARZ')
 label_head.grid(row=0, column=0, columnspan=2)
 
-label_name = Label(left_frame, text = 'Imię: ')
-label_name.grid(row=1, column=0, sticky=W)
-entry_name = Entry(left_frame, width=25)
-entry_name.grid(row=1, column=1, sticky=EW)
+label_1 = Label(left_frame, text = '...')
+label_1.grid(row=1, column=0, sticky=W)
+entry_1 = Entry(left_frame, width=25)
+entry_1.grid(row=1, column=1, sticky=EW)
 
-label_surname = Label(left_frame, text = 'Nazwisko: ')
-label_surname.grid(row=2, column=0, sticky=W)
-entry_surname = Entry(left_frame, width=25)
-entry_surname.grid(row=2, column=1, sticky=EW)
+label_2 = Label(left_frame, text = '...')
+label_2.grid(row=2, column=0, sticky=W)
+entry_2 = Entry(left_frame, width=25)
+entry_2.grid(row=2, column=1, sticky=EW)
 
-label_city = Label(left_frame, text = 'Miasto: ')
-label_city.grid(row=3, column=0, sticky=W)
-entry_city = Entry(left_frame, width=25)
-entry_city.grid(row=3, column=1, sticky=EW)
+label_3 = Label(left_frame, text = '...')
+label_3.grid(row=3, column=0, sticky=W)
+entry_3 = Entry(left_frame, width=25)
+entry_3.grid(row=3, column=1, sticky=EW)
 
-label_code = Label(left_frame, text = 'Kod Lotniska: ')
-label_code.grid(row=4, column=0, sticky=W)
-entry_code = Entry(left_frame, width=25)
-entry_code.grid(row=4, column=1, sticky=EW)
+label_4 = Label(left_frame, text = '...')
+label_4.grid(row=4, column=0, sticky=W)
+entry_4 = Entry(left_frame, width=25)
+entry_4.grid(row=4, column=1, sticky=EW)
+
+label_5 = Label(left_frame, text = '...')
+label_5.grid(row=5, column=0, sticky=W)
+entry_5 = Entry(left_frame, width=25)
+entry_5.grid(row=5, column=1, sticky=EW)
+
+label_6 = Label(left_frame, text = '...')
+label_6.grid(row=6, column=0, sticky=W)
+entry_6 = Entry(left_frame, width=25)
+entry_6.grid(row=6, column=1, sticky=EW)
 
 button_add = Button(left_frame, text = 'DODAJ', width=25)
-button_add.grid(row=5, column=0, columnspan=2, sticky=EW)
+button_add.grid(row=7, column=0, columnspan=2, sticky=EW)
 
 button_update = Button(left_frame, text = 'AKTUALIZUJ', width=25)
-button_update.grid(row=6, column=0, columnspan=2, sticky=EW)
+button_update.grid(row=8, column=0, columnspan=2, sticky=EW)
 
 button_delete = Button(left_frame, text='USUŃ', width=25)
-button_delete.grid(row=7, column=0, columnspan=2, sticky=EW)
+button_delete.grid(row=9, column=0, columnspan=2, sticky=EW)
 
-Frame(left_frame, height=2).grid(row=8, column=0, columnspan=2, sticky=EW)
+Frame(left_frame, height=2).grid(row=10, column=0, columnspan=2, sticky=EW)
 
 filter_frame = Frame(left_frame)
-filter_frame.grid(row=9, column=0, columnspan=2, sticky=EW)
+filter_frame.grid(row=10, column=0, columnspan=2, sticky=EW)
 
 label_list = Label(filter_frame, text='LISTA: ')
 label_list.grid(row=0, column=0, sticky=W)
@@ -84,15 +97,18 @@ checkbox_filtr = ttk.Combobox(filter_frame, values=["KODY"])
 checkbox_filtr.grid(row=0, column=2, sticky=W)
 checkbox_filtr.current(0)
 
+button_filtr = Button(filter_frame, text='FILTR', width=5)
+button_filtr.grid(row=0, column=3)
+
 
 list_frame = Frame(left_frame)
-list_frame.grid(row=10, column=0, columnspan=2, sticky=NSEW)
+list_frame.grid(row=11, column=0, columnspan=2, sticky=NSEW)
 
-left_frame.grid_rowconfigure(10, weight=1)
+left_frame.grid_rowconfigure(11, weight=1)
 list_frame.grid_rowconfigure(0, weight=1)
 list_frame.grid_columnconfigure(0, weight=1)
 
-listbox_list = Listbox(list_frame)
+listbox_list = Listbox(list_frame, exportselection=False)
 listbox_list.grid(row=0, column=0, sticky=NSEW)
 
 scrollbar = Scrollbar(list_frame)
