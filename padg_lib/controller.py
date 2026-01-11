@@ -1,5 +1,3 @@
-from operator import index
-import psycopg2
 from padg_lib.view import *
 from padg_lib.model import airports, employees, clients
 
