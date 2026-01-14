@@ -2,7 +2,6 @@ from tkinter import *
 from tkinter import ttk
 import tkintermapview
 
-
 root = Tk()
 root.title('=== SYSTEM LOTNISKOWY ===')
 root.geometry('1200x700')
@@ -20,7 +19,6 @@ root.grid_rowconfigure(1, weight=1)
 root.grid_columnconfigure(1, weight=1)
 
 #GÓRNA CZĘŚĆ
-
 top_frame.grid_columnconfigure(0, weight=1)
 top_frame.grid_columnconfigure(1, weight=1)
 top_frame.grid_columnconfigure(2, weight=1)
