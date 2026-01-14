@@ -119,6 +119,11 @@ def switch_airports():
     for airport in airports:
         listbox_list.insert(END, f"{airport.name}")
 
+    code_list = []
+    for airport in airports:
+        code_list.append(airport.code)
+    checkbox_filtr.config(values=code_list)
+
     refresh_map()
 
     entry_1.delete(0, END)
@@ -159,6 +164,11 @@ def switch_employees():
     for employee in employees:
         listbox_list.insert(END, f"{employee.name} {employee.surname}")
 
+    code_list = []
+    for airport in airports:
+        code_list.append(airport.code)
+    checkbox_filtr.config(values=code_list)
+
     refresh_map()
 
     entry_1.delete(0, END)
@@ -196,6 +206,11 @@ def switch_clients():
 
     for client in clients:
         listbox_list.insert(END, f"{client.name} {client.surname}")
+
+    code_list = []
+    for airport in airports:
+        code_list.append(airport.code)
+    checkbox_filtr.config(values=code_list)
 
     refresh_map()
 
